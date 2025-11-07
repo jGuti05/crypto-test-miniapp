@@ -1,0 +1,206 @@
+<scroll-view scroll-y="true" class="container">
+  <!-- Header -->
+  <view class="header">
+    <text class="header-title">Web Crypto API Comprehensive Test</text>
+    <button class="rerun-button" onTap="onRerunTests" disabled="{{isRunning}}">
+      {{isRunning ? 'Running...' : 'Re-run All Tests'}}
+    </button>
+    <text class="last-run" a:if="{{lastRunTime}}">Last run: {{lastRunTime}}</text>
+  </view>
+
+  <!-- Environment Info Section -->
+  <view class="section" a:if="{{environmentInfo}}">
+    <text class="section-title">📱 Environment Information</text>
+    <view class="info-row">
+      <text class="info-label">Platform:</text>
+      <text class="info-value">{{environmentInfo.platform}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">Build Type:</text>
+      <text class="info-value">{{environmentInfo.buildType}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">Available APIs:</text>
+      <view class="api-list">
+        <text class="api-item">crypto: {{environmentInfo.availableAPIs.crypto ? '✅' : '❌'}}</text>
+        <text class="api-item">crypto.subtle: {{environmentInfo.availableAPIs.cryptoSubtle ? '✅' : '❌'}}</text>
+        <text class="api-item">crypto.getRandomValues: {{environmentInfo.availableAPIs.cryptoGetRandomValues ? '✅' : '❌'}}</text>
+        <text class="api-item">crypto-js: {{environmentInfo.availableAPIs.cryptoJS ? '✅' : '❌'}}</text>
+        <text class="api-item">TextEncoder: {{environmentInfo.availableAPIs.textEncoder ? '✅' : '❌'}}</text>
+        <text class="api-item">TextDecoder: {{environmentInfo.availableAPIs.textDecoder ? '✅' : '❌'}}</text>
+        <text class="api-item">btoa: {{environmentInfo.availableAPIs.btoa ? '✅' : '❌'}}</text>
+        <text class="api-item">atob: {{environmentInfo.availableAPIs.atob ? '✅' : '❌'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Test Summary -->
+  <view class="section summary-section">
+    <text class="section-title">📊 Test Summary</text>
+    <view class="summary-row">
+      <text class="summary-label">Total Tests:</text>
+      <text class="summary-value">{{totalTests}}</text>
+    </view>
+    <view class="summary-row">
+      <text class="summary-label">Passed:</text>
+      <text class="summary-value passed">{{passedTests}}</text>
+    </view>
+    <view class="summary-row">
+      <text class="summary-label">Failed:</text>
+      <text class="summary-value failed">{{failedTests}}</text>
+    </view>
+  </view>
+
+  <!-- Basic API Tests -->
+  <view class="section">
+    <text class="section-title">🔍 Basic API Tests</text>
+    <view class="test-item" a:for="{{basicTests}}" a:key="index">
+      <view class="test-header">
+        <text class="test-name">{{item.name}}</text>
+        <text class="test-status {{item.passed ? 'passed' : 'failed'}}">
+          {{item.passed ? '✅' : '❌'}}
+        </text>
+      </view>
+      <view class="test-details">
+        <text class="test-description">{{item.description}}</text>
+        <view class="test-result-row">
+          <text class="test-label">Expected:</text>
+          <text class="test-value">{{item.expected}}</text>
+        </view>
+        <view class="test-result-row">
+          <text class="test-label">Actual:</text>
+          <text class="test-value">{{item.actual}}</text>
+        </view>
+        <view class="test-result-row">
+          <text class="test-label">Duration:</text>
+          <text class="test-value">{{item.duration}}ms</text>
+        </view>
+        <view class="test-error" a:if="{{item.error}}">
+          <text class="error-label">Error Details:</text>
+          <text class="error-message">{{item.error.message}}</text>
+          <text class="error-type" a:if="{{item.error.type}}">Type: {{item.error.type}}</text>
+          <text class="error-stack" a:if="{{item.error.stack}}">{{item.error.stack}}</text>
+        </view>
+        <view class="process-steps" a:if="{{item.processStepsFormatted}}">
+          <text class="process-label">Process Steps:</text>
+          <text class="process-content">{{item.processStepsFormatted}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- crypto-js Tests (Expected to Work) -->
+  <view class="section">
+    <text class="section-title">✅ crypto-js Tests (Expected to Work)</text>
+    <view class="test-item" a:for="{{cryptoJSTests}}" a:key="index">
+      <view class="test-header">
+        <text class="test-name">{{item.name}}</text>
+        <text class="test-status {{item.passed ? 'passed' : 'failed'}}">
+          {{item.passed ? '✅' : '❌'}}
+        </text>
+      </view>
+      <view class="test-details">
+        <text class="test-description">{{item.description}}</text>
+        <view class="test-result-row">
+          <text class="test-label">Expected:</text>
+          <text class="test-value">{{item.expected}}</text>
+        </view>
+        <view class="test-result-row">
+          <text class="test-label">Actual:</text>
+          <text class="test-value">{{item.actual}}</text>
+        </view>
+        <view class="test-result-row">
+          <text class="test-label">Duration:</text>
+          <text class="test-value">{{item.duration}}ms</text>
+        </view>
+        <view class="test-error" a:if="{{item.error}}">
+          <text class="error-label">Error Details:</text>
+          <text class="error-message">{{item.error.message}}</text>
+          <text class="error-type" a:if="{{item.error.type}}">Type: {{item.error.type}}</text>
+          <text class="error-stack" a:if="{{item.error.stack}}">{{item.error.stack}}</text>
+        </view>
+        <view class="process-steps" a:if="{{item.processStepsFormatted}}">
+          <text class="process-label">Process Steps:</text>
+          <text class="process-content">{{item.processStepsFormatted}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Web Crypto API Tests (Expected to Fail on iOS Release) -->
+  <view class="section">
+    <text class="section-title">⚠️ Web Crypto API Tests (Expected to Fail on iOS Release)</text>
+    <view class="test-item" a:for="{{webCryptoAPITests}}" a:key="index">
+      <view class="test-header">
+        <text class="test-name">{{item.name}}</text>
+        <text class="test-status {{item.passed ? 'passed' : 'failed'}}">
+          {{item.passed ? '✅' : '❌'}}
+        </text>
+      </view>
+      <view class="test-details">
+        <text class="test-description">{{item.description}}</text>
+        <view class="test-result-row">
+          <text class="test-label">Expected:</text>
+          <text class="test-value">{{item.expected}}</text>
+        </view>
+        <view class="test-result-row">
+          <text class="test-label">Actual:</text>
+          <text class="test-value">{{item.actual}}</text>
+        </view>
+        <view class="test-result-row">
+          <text class="test-label">Duration:</text>
+          <text class="test-value">{{item.duration}}ms</text>
+        </view>
+        <view class="test-error" a:if="{{item.error}}">
+          <text class="error-label">Error Details:</text>
+          <text class="error-message">{{item.error.message}}</text>
+          <text class="error-type" a:if="{{item.error.type}}">Type: {{item.error.type}}</text>
+          <text class="error-stack" a:if="{{item.error.stack}}">{{item.error.stack}}</text>
+        </view>
+        <view class="process-steps" a:if="{{item.processStepsFormatted}}">
+          <text class="process-label">Process Steps:</text>
+          <text class="process-content">{{item.processStepsFormatted}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Full Flow Tests -->
+  <view class="section">
+    <text class="section-title">🔄 Full Flow Tests</text>
+    <view class="test-item" a:for="{{fullFlowTests}}" a:key="index">
+      <view class="test-header">
+        <text class="test-name">{{item.name}}</text>
+        <text class="test-status {{item.passed ? 'passed' : 'failed'}}">
+          {{item.passed ? '✅' : '❌'}}
+        </text>
+      </view>
+      <view class="test-details">
+        <text class="test-description">{{item.description}}</text>
+        <view class="test-result-row">
+          <text class="test-label">Expected:</text>
+          <text class="test-value">{{item.expected}}</text>
+        </view>
+        <view class="test-result-row">
+          <text class="test-label">Actual:</text>
+          <text class="test-value">{{item.actual}}</text>
+        </view>
+        <view class="test-result-row">
+          <text class="test-label">Duration:</text>
+          <text class="test-value">{{item.duration}}ms</text>
+        </view>
+        <view class="test-error" a:if="{{item.error}}">
+          <text class="error-label">Error Details:</text>
+          <text class="error-message">{{item.error.message}}</text>
+          <text class="error-type" a:if="{{item.error.type}}">Type: {{item.error.type}}</text>
+          <text class="error-stack" a:if="{{item.error.stack}}">{{item.error.stack}}</text>
+        </view>
+        <view class="process-steps" a:if="{{item.processStepsFormatted}}">
+          <text class="process-label">Process Steps:</text>
+          <text class="process-content">{{item.processStepsFormatted}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+

@@ -1,0 +1,10 @@
+{
+  "pages": [
+    "pages/test/test"
+  ],
+  "window": {
+    "titleBarColor": "#000",
+    "backgroundColor": "#FFF"
+  }
+}
+
